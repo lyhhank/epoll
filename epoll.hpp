@@ -1,6 +1,6 @@
 /*********************************************************************************
   Copyright(C),2019-2020,lrwwxj@163.com
-  FileName:		base.hpp
+  FileName:		epoll.hpp
   Author: 		limeng
   Version:  	v1.0
   Date:			2020.3.1
@@ -30,8 +30,8 @@
 
 namespace lmSOCKET
 {
-    // 表示消息长度的字节数
-    const int MSG_LEN_BYTE  = 2;
+    // 表示消息长度的字节数,要和类型一致
+    const unsigned short MSG_LEN_BYTE = 2;
     
     int comp(const std::pair<int, int> &lhs, const std::pair<int, int> &rhs);
     
@@ -58,7 +58,7 @@ namespace lmSOCKET
             char *GetSendBuf(const int fd) const;
             int ClientGetFd(void) const;
             int StartSendMsg(const int fd, const int len);
-            int StartSendFile(const int fd, const std::string fileName, const size_t offset);
+            int StartSendFile(const int fd, const std::string &fileName, const size_t offset);
             
         protected:
             // ACCEPT
@@ -81,9 +81,9 @@ namespace lmSOCKET
             int GetIpv6Index(int index, unsigned      &ifindex);
             int UdpConnect(const int fd, struct sockaddr_storage *p_tcpudp_addr);
 
-            // SEND
-            int FillMsg(void);
-            int FillFile(void);
+            // SEND
+            void FillHead(msgType_e type);
+            int FillBody();
             int SendInit(void);
             int SendData(const int fd);
             int GetSlotIndex(void);
@@ -93,13 +93,12 @@ namespace lmSOCKET
             int GetFdIndex(const int fd, const int new_index, const int delete_flag);
             
             // RECV
-            int RecvConnect(void);
-            int RecvInit(void);
+            int GetMsgType(void);
+            int MoveData(void);
             int DealData(int fd);
             int RecvData(const int fd);
-            int PkgHeadOk(void);
-            int OnePkg(void);
-            void MoveData(const int len);
+            int RecvConnect(void);
+            int RecvInit(void);
             int RecvCs(const int fd, char *recvbuf, const int recvlen, const msgType_e type);
             int TimerInit(void);
             void TimeoutSec(const int fd);
@@ -107,6 +106,7 @@ namespace lmSOCKET
             // CEPOLL
             void IgSignal(void) const;
             int MsgHeadInit(void);
+            void GetHead(msgType_e type, std::string &head);
             int PthOffline(const int fd);
             int PthOnline(const int fd);
             int ForkOffline(const int fd);
@@ -137,13 +137,14 @@ namespace lmSOCKET
             int m_haveHead;
             std::string m_msgHead;
             std::string m_fileHead;
+            std::string m_fileEnd;
 
             std::vector<std::pair<int, int>> m_FdNumInLoad; // 每个进程的负载数量
 
             std::map<std::string, int> m_SameIpLimit; // ip, num;
             std::map<std::string, int>::iterator m_iterSameIpLimit;
 
-            unsigned int  m_curSlot;
+            unsigned int  m_curSlot; // 时间轮
             std::map<int, int> m_fdIndex; // fd->index
             std::map<int, int>::iterator m_iterFdIndex;
 

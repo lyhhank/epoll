@@ -1,6 +1,6 @@
 /*********************************************************************************
   Copyright(C),2019-2020,lrwwxj@163.com
-  FileName:		base.hpp
+  FileName:		usrapp.hpp
   Author: 		limeng
   Version:  	v1.0
   Date:			2020.3.1
@@ -31,7 +31,7 @@ namespace lmSOCKET
             
             // 开始发送
             virtual int StartSendMsg(const int fd, const int sendlen) = 0;
-            virtual int StartSendFile(const int fd, const std::string fileName, const size_t offset) = 0;
+            virtual int StartSendFile(const int fd, const std::string &fileName, const size_t offset) = 0;
 
             // 框架调客户接口
             int ServerRecv(const int fd, const char *recvbuf, const int recvlen, const msgType_e type);
@@ -39,7 +39,7 @@ namespace lmSOCKET
 
             // 发送（用户可自定义，此例是调用上面“开始发送”的函数示例）
             int client_send_msg(void);
-            int client_send_file(const std::string fileName, const size_t offset);
+            int client_send_file(const std::string &fileName, const size_t offset);
 
             // EP超时调
             int ClientTimeout(const int fd); 

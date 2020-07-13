@@ -3,7 +3,7 @@
 #
 CFLAGS+=-DPOSIXLY_CORRECT -Wall -O2 -std=c++11
 CC=g++
-TARGET=lmc
+TARGET=epcs
 
 %.o: %.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -12,7 +12,7 @@ SOURCES = $(wildcard *.cpp)
 OBJS = $(patsubst %.cpp,%.o, $(SOURCES))
 
 $(TARGET) : $(OBJS)
-	$(CC) $(OBJS) -o $(TARGET) $(LIBS) $(LDFLAGS) -lpthread 
+	$(CC) $(OBJS) -o $(TARGET) $(LIBS) $(LDFLAGS) -lpthread
 
 all: $(TARGET)
 

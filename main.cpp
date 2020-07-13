@@ -1,3 +1,13 @@
+/*********************************************************************************
+  Copyright(C),2019-2020,lrwwxj@163.com
+  FileName:		main.cpp
+  Author: 		limeng(wx:18180447276)
+  Version:  	v1.0
+  Date:			2020.3.1
+  Description:  主程序入口
+**********************************************************************************/
+
+
 #include <iostream>
 #include <sys/types.h>
 #include <string.h>

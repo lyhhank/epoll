@@ -1,3 +1,14 @@
+/*********************************************************************************
+  Copyright(C),2019-2020,lrwwxj@163.com
+  FileName:		usrapp.cpp
+  Author: 		limeng(wx:18180447276)
+  Version:  	v1.0
+  Date:			2020.3.1
+  Description:  (USR 程序 示例)
+    消息
+    文件
+**********************************************************************************/
+
 #include <iostream>
 #include <sys/types.h>
 #include <string.h>
@@ -38,7 +49,10 @@ namespace lmSOCKET
     
     int CUSR::ServerRecv(const int fd, const char *recvbuf, const int recvlen, const msgType_e type)
     {
-        log("server Recv = %s", recvbuf);
+        char buf[2028] = {0};
+        ::memcpy(buf, recvbuf, recvlen);
+        
+        log("server Recv = %s", buf);
         
         char Send[] = "i'm recved";
         
@@ -86,7 +100,7 @@ namespace lmSOCKET
         return OK;
     }
 
-    int CUSR::client_send_file(const std::string fileName, const size_t offset)
+    int CUSR::client_send_file(const std::string &fileName, const size_t offset)
     {
         int fd = ClientGetFd();
         StartSendFile(fd, fileName, offset);

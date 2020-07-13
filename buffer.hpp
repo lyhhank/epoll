@@ -1,6 +1,6 @@
 /*********************************************************************************
   Copyright(C),2019-2020,lrwwxj@163.com
-  FileName:		base.hpp
+  FileName:		buffer.hpp
   Author: 		limeng
   Version:  	v1.0
   Date:			2020.3.1
@@ -25,19 +25,16 @@ struct data
 {
     int fd;
 
-    char buf[RECV_BUF_LEN];             // 以接收BUF大小申请，发送为1半
+    char buf[BUF_LEN*2];                // BUF
     char *pbuf;                         // 处理数据指针
     
     unsigned int len;                   // 收发的长度
-    unsigned int dealLen;               // 处理数据长度
-
-    msgType_e msgType;              // 消息类型
+    msgType_e msgType;                  // 消息类型
     
-    char fileName[MAX_FILENAME_LEN];      // 文件名长度
+    char fileName[MAX_FILENAME_LEN];    // 文件名长度
     ssize_t off;                        // 传送文件的off
 
     long long time;                     // 占BUF时间
-    unsigned int tryTimes;              // 错误重试
 };
 
 /*
@@ -56,7 +53,7 @@ namespace lmSOCKET
             int BufTimeOut(struct data *pbuf);
             
             void InitBuf(struct data *buf, const int fd);
-            struct data *GetBuf(const int fd, bufStatus_e &status);
+            struct data *GetBuf(const int fd);
             int FreeBuf(const int fd);
 
             struct data *m_pdata; // BUF
